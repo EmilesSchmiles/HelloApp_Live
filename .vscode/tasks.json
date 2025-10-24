@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run API",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["run", "--project", "api/api.csproj"],
+      "isBackground": true,
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Run Client",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["run", "--project", "client/client.csproj"],
+      "isBackground": true,
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Run Full App",
+      "dependsOn": ["Run API", "Run Client"]
+    }
+  ]
+}
