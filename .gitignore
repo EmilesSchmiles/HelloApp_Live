@@ -1,0 +1,24 @@
+# Visual Studio / .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code
+.vscode/
+
+# ASP.NET / Blazor
+client/bin/
+client/obj/
+api/bin/
+api/obj/
+**/publish/
+
+# Node / npm
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
