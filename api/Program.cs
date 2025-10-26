@@ -9,34 +9,48 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddHttpClient<SupabaseService>();
 
-// Add CORS policy to allow client
+// Add CORS policy (include both local + Render)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowClient",
-        policy => policy.WithOrigins("http://localhost:5261") // client URL
-                        .AllowAnyHeader()
-                        .AllowAnyMethod());
+    options.AddPolicy("AllowClient", policy =>
+        policy.WithOrigins(
+            "http://localhost:5261",              // local dev
+            "https://helloapp-live.onrender.com"  // <-- update to your actual Render frontend URL later
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod());
 });
+
+// Configure port dynamically for Render
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
 
 var app = builder.Build();
 
 // Use CORS
 app.UseCors("AllowClient");
 
-// Swagger only in development
+// Swagger only in dev
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// ⚠️ Disable HTTPS redirection on Render (no cert available)
+if (!app.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthorization();
-
 app.MapControllers();
 
-// Existing WeatherForecast endpoint
+// Test endpoints
+app.MapGet("/", () => "API is running ✅");
+app.MapGet("/healthz", () => Results.Ok("Healthy ✅"));
+
+// Example WeatherForecast
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -45,8 +59,7 @@ var summaries = new[]
 app.MapGet("/weatherforecast", () =>
 {
     var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
+        new WeatherForecast(
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
             Random.Shared.Next(-20, 55),
             summaries[Random.Shared.Next(summaries.Length)]
@@ -57,11 +70,8 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
-app.MapGet("/", () => "API is running ✅");
-
 app.Run();
 
-// WeatherForecast record
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
