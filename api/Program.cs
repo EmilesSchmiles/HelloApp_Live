@@ -57,6 +57,8 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
+app.MapGet("/", () => "API is running ✅");
+
 app.Run();
 
 // WeatherForecast record
