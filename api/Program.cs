@@ -47,8 +47,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Test endpoints
-app.MapGet("/", () => "API is running ✅");
-app.MapGet("/healthz", () => Results.Ok("Healthy ✅"));
+app.MapGet("/", () => "API is running");
+app.MapGet("/healthz", () => Results.Ok("Healthy"));
 
 // Example WeatherForecast
 var summaries = new[]
