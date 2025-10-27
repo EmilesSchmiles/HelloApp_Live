@@ -16,7 +16,7 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(
             "http://localhost:5261",              // local dev
             "https://helloapp-live.onrender.com",  // <-- update to your actual Render frontend URL later
-            "https://helloapp-live-client.onrender.com"
+            "https://helloapp-live-ClientSide.onrender.com"
         )
         .AllowAnyHeader()
         .AllowAnyMethod());
