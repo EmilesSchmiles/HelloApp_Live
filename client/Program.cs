@@ -21,4 +21,8 @@ builder.Services.AddScoped(sp =>
 builder.Configuration["SUPABASE_URL"] = supabaseUrl;
 builder.Configuration["SUPABASE_ANON_KEY"] = supabaseAnonKey;
 
+// Test endpoints
+app.MapGet("/", () => "API is running");
+app.MapGet("/healthz", () => Results.Ok("Healthy"));
+
 await builder.Build().RunAsync();
