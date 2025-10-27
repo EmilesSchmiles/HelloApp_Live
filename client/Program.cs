@@ -1,27 +1,26 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using client;
-
+using System.Net.Http;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-// Read environment variables set in Render
-var apiBaseUrl = Environment.GetEnvironmentVariable("API_BASE_URL") 
-                 ?? "http://localhost:5000"; // fallback if env variable is null
+// API URL - hardcoded because your API is stable
+var apiBaseUrl = "https://helloapp-liveapi.onrender.com";
 
-var supabaseUrl = Environment.GetEnvironmentVariable("SUPABASE_URL");
+// Read Supabase info from configuration (set as environment variables in Netlify)
+var supabaseUrl = builder.Configuration["SUPABASE_URL"] ?? throw new InvalidOperationException(
+    "SUPABASE_URL environment variable is not set.");
+var supabaseAnonKey = builder.Configuration["SUPABASE_ANON_KEY"] ?? throw new InvalidOperationException(
+    "SUPABASE_ANON_KEY environment variable is not set.");
 
-var supabaseAnonKey = Environment.GetEnvironmentVariable("SUPABASE_ANON_KEY");
-
-// Set up HttpClient for the live API
-builder.Services.AddScoped(sp =>
-    new HttpClient { BaseAddress = new Uri(apiBaseUrl) });
+// Configure HttpClient for API requests
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseUrl) });
 
 // Make Supabase info available throughout the app
 builder.Configuration["SUPABASE_URL"] = supabaseUrl;
 builder.Configuration["SUPABASE_ANON_KEY"] = supabaseAnonKey;
-
 
 await builder.Build().RunAsync();
