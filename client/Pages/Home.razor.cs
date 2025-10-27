@@ -1,22 +1,23 @@
-// Home.razor.cs
 using Microsoft.AspNetCore.Components;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace HelloApp.Pages   // <- IMPORTANT: must match your project/namespace
+namespace HelloApp.Pages
 {
     public partial class Home : ComponentBase
     {
         [Inject]
-        private HttpClient Http { get; set; } = default!; // ensures non-null
+        private HttpClient Http { get; set; } = default!;
 
         protected string message = "";
 
         protected async Task GetNameFromApi()
         {
-            var response = await Http.GetFromJsonAsync<NameResponse>("http://localhost:5174/Greetings");
-            message = "Hello " + response?.Name;
+            // Point to your live API
+            var response = await Http.GetFromJsonAsync<NameResponse>("https://helloapp-liveapi.onrender.com/Greetings");
+
+            message = response?.Name != null ? $"Hello {response.Name}" : "No name returned";
         }
 
         public class NameResponse
