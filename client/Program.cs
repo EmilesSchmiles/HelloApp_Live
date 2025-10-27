@@ -20,7 +20,7 @@ var supabaseAnonKey = builder.Configuration["SUPABASE_ANON_KEY"] ?? throw new In
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseUrl) });
 
 // Make Supabase info available throughout the app
-builder.Configuration["SUPABASE_URL"] = supabaseUrl;
-builder.Configuration["SUPABASE_ANON_KEY"] = supabaseAnonKey;
+builder.Configuration["SUPABASE_URL"] = "https://tghkupnleutlklclixtp.supabase.co";
+builder.Configuration["SUPABASE_ANON_KEY"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnaGt1cG5sZXV0bGtsY2xpeHRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEyMjk4NTcsImV4cCI6MjA3NjgwNTg1N30.HzhHzhDLetjn1ULjhfQDDHj7BVNp5Yv-03tTwYgPEW4";
 
 await builder.Build().RunAsync();
