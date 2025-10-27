@@ -13,10 +13,9 @@ builder.Services.AddHttpClient<SupabaseService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClient", policy =>
-        policy.WithOrigins(
-            "http://localhost:5261",              // local dev
+        policy.WithOrigins(          
             "https://helloapp-live.onrender.com",  // <-- update to your actual Render frontend URL later
-            "https://helloapp-live-ClientSide.onrender.com"
+            "https://helloapplive.netlify.app/"    // <-- example Netlify URL
         )
         .AllowAnyHeader()
         .AllowAnyMethod());
